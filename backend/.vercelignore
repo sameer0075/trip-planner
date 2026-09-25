@@ -1,3 +1,5 @@
+# Vercel serves this project with its native Django support (WSGI_APPLICATION in settings),
+# installing dependencies from requirements.txt. Local-only files stay out of the upload.
 .venv
 **/__pycache__
 .pytest_cache
@@ -5,3 +7,4 @@
 .env
 Dockerfile
 gunicorn.conf.py
+trips/tests

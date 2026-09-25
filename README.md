@@ -130,10 +130,11 @@ A location without coordinates is geocoded on the server. Errors use one envelop
 Both apps deploy from this one repository as two Vercel projects. Import the repo twice
 (**Add New → Project**) and set a different **Root Directory** for each.
 
-**1. API** (Root Directory `backend`, Framework Preset **Other**)
+**1. API** (Root Directory `backend`, Framework Preset **Django**)
 
-`backend/vercel.json` routes every request to the Django WSGI app in `backend/api/index.py`.
-Set these environment variables:
+Vercel serves the app with its native Django support: it installs `requirements.txt`, reads
+`WSGI_APPLICATION` from the settings and routes every request to it. Set these environment
+variables:
 
 | Variable                      | Value                                                  |
 | ----------------------------- | ------------------------------------------------------ |
