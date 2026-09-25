@@ -1,0 +1,123 @@
+@import 'tailwindcss';
+
+/* Semantic design tokens. Components only use these names, so dark mode is a token swap. */
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --color-canvas: #f3f5f9;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f9fc;
+  --color-line: #e3e8ef;
+  --color-line-strong: #cbd5e1;
+  --color-ink: #0f172a;
+  --color-ink-muted: #475569;
+  --color-ink-subtle: #8a97aa;
+
+  --color-brand: #0f1b2d;
+  --color-brand-soft: #1b2b45;
+  --color-accent: #f59e0b;
+  --color-accent-soft: #fef3c7;
+  --color-primary: #2563eb;
+  --color-primary-strong: #1d4ed8;
+  --color-primary-soft: #e8efff;
+  --color-danger: #dc2626;
+  --color-danger-soft: #fef2f2;
+  --color-success: #059669;
+
+  /* Duty statuses: identical on the log grid, the itinerary and the map. */
+  --color-duty-off: #64748b;
+  --color-duty-sleeper: #7c3aed;
+  --color-duty-driving: #2563eb;
+  --color-duty-on: #d97706;
+
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px -6px rgb(15 23 42 / 0.08);
+  --shadow-pop: 0 12px 32px -8px rgb(15 23 42 / 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-canvas: #0a101c;
+    --color-surface: #111a2a;
+    --color-surface-muted: #0e1624;
+    --color-line: #1e2a3e;
+    --color-line-strong: #2c3a52;
+    --color-ink: #e7ecf3;
+    --color-ink-muted: #a3b0c2;
+    --color-ink-subtle: #6b7a90;
+
+    --color-accent-soft: #3a2a0a;
+    --color-primary: #4f86f7;
+    --color-primary-strong: #6b9bff;
+    --color-primary-soft: #16233d;
+    --color-danger: #f87171;
+    --color-danger-soft: #2a1414;
+
+    --color-duty-off: #8a9ab0;
+    --color-duty-sleeper: #a78bfa;
+    --color-duty-driving: #4f86f7;
+    --color-duty-on: #f59e0b;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 16px -6px rgb(0 0 0 / 0.4);
+    --shadow-pop: 0 12px 32px -8px rgb(0 0 0 / 0.6);
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-ink;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+/* Leaflet popups, restyled to match the cards. */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-surface-muted);
+}
+
+@media (prefers-color-scheme: dark) {
+  .leaflet-tile-pane {
+    filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9) saturate(0.6);
+  }
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-pop);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+}
+
+.leaflet-popup-content {
+  margin: 12px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--color-ink-subtle);
+}
+
+.stop-pin {
+  background: none;
+  border: none;
+}
+
+@page {
+  size: letter landscape;
+  margin: 0.35in;
+}
