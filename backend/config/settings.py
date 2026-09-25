@@ -28,7 +28,11 @@ if not SECRET_KEY:
         raise ImproperlyConfigured("DJANGO_SECRET_KEY must be set when DJANGO_DEBUG is off.")
     SECRET_KEY = "insecure-development-only-key"
 
-ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0")
+# Vercel sets VERCEL=1 in its builds and functions; allow its deployment domains by default there.
+ON_VERCEL = env_bool("VERCEL")
+ALLOWED_HOSTS = env_list(
+    "DJANGO_ALLOWED_HOSTS", ".vercel.app" if ON_VERCEL else "localhost,127.0.0.1,0.0.0.0"
+)
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",

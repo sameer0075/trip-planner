@@ -125,12 +125,33 @@ POST /api/trips/plan/
 A location without coordinates is geocoded on the server. Errors use one envelope:
 `{"error": {"code", "message", "details"?}}`.
 
-## Deployment
+## Deployment (Vercel)
 
-- **API:** `render.yaml` is a Render Blueprint that builds `backend/Dockerfile`. Set
-  `CORS_ALLOWED_ORIGINS` to the web app's URL. The image runs anywhere Docker does (Fly.io,
-  Railway, and others).
-- **Web:** deploy `frontend/` to Vercel (`vercel.json` included) with `VITE_API_BASE_URL` set to
-  `https://<api-host>/api`.
+Both apps deploy from this one repository as two Vercel projects. Import the repo twice
+(**Add New → Project**) and set a different **Root Directory** for each.
 
+**1. API** (Root Directory `backend`, Framework Preset **Other**)
+
+`backend/vercel.json` routes every request to the Django WSGI app in `backend/api/index.py`.
+Set these environment variables:
+
+| Variable                      | Value                                                  |
+| ----------------------------- | ------------------------------------------------------ |
+| `DJANGO_SECRET_KEY`           | a long random string                                   |
+| `CORS_ALLOWED_ORIGINS`        | the web app URL, e.g. `https://eld-web.vercel.app`     |
+| `CORS_ALLOWED_ORIGIN_REGEXES` | optional, for preview URLs: `^https://eld-web-.*\.vercel\.app$` |
+
+`*.vercel.app` hosts are allowed automatically on Vercel. Check it at
+`https://<api-project>.vercel.app/api/health/`.
+
+**2. Web app** (Root Directory `frontend`, Framework Preset **Vite**)
+
+| Variable            | Value                                   |
+| ------------------- | --------------------------------------- |
+| `VITE_API_BASE_URL` | `https://<api-project>.vercel.app/api`  |
+
+Deploy the API first, so you know its URL for `VITE_API_BASE_URL`. Then deploy the web app, add
+its URL to the API's `CORS_ALLOWED_ORIGINS`, and redeploy the API.
+
+The Docker images are still used for local development and work on any container host.
 Environment variables are documented in `backend/.env.example` and `frontend/.env.example`.
