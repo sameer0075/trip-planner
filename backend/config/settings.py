@@ -7,8 +7,6 @@ database, admin and template machinery are deliberately left out.
 import os
 from pathlib import Path
 
-from django.core.exceptions import ImproperlyConfigured
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -22,11 +20,9 @@ def env_list(name: str, default: str = "") -> list[str]:
 
 DEBUG = env_bool("DJANGO_DEBUG", default=False)
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "")
-if not SECRET_KEY:
-    if not DEBUG:
-        raise ImproperlyConfigured("DJANGO_SECRET_KEY must be set when DJANGO_DEBUG is off.")
-    SECRET_KEY = "insecure-development-only-key"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") or (
+    "insecure-development-only-key" if DEBUG else ""
+)
 
 # Vercel sets VERCEL=1 in its builds and functions; allow its deployment domains by default there.
 ON_VERCEL = env_bool("VERCEL")
